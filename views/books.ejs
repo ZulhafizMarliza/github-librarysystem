@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/books.css" />
+    <title>Library System</title>
+  </head>
+  <body>
+    <h1>Books in the Library</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ISBN</th>
+          <th>Author</th>
+          <th>Publisher</th>
+          <th>Date Received</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% books.forEach(function(book) { %>
+        <tr>
+          <td><%= book.id %></td>
+          <td><%= book.isbn %></td>
+          <td><%= book.author %></td>
+          <td><%= book.publisher %></td>
+          <td><%= book.datereceived %></td>
+          <td><%= book.categoryname %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </br>
+    <h2 align="center" >Add New Book</h2>
+    <form action="/books" method="post">
+      <label for="isbn">ISBN:</label>
+      <input type="text" id="isbn" name="isbn" /><br />
+
+      <label for="author">Author:</label>
+      <input type="text" id="author" name="author" /><br />
+
+      <label for="publisher">Publisher:</label>
+      <input type="text" id="publisher" name="publisher" /><br />
+
+      <label for="category">Category:</label>
+      <select id="category" name="category">
+        <option value="1">Fantasy</option>
+        <option value="2">Classic Literature</option>
+        <option value="3">Science Fiction</option>
+        <option value="4">Philosophy</option>
+        <option value="5">Contemporary Fiction</option></select
+      ><br />
+
+      <input type="submit" value="Add Book" />
+    </form>
+    <br />
+  </body>
+</html>
