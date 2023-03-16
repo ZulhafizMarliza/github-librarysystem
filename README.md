@@ -9,3 +9,6 @@ book records
 -ADD new record (done)
 -DELETE record (not yet)
 -Update record (not yet)
+
+
+cannot be seen in Github. as the file is .EJS :(
