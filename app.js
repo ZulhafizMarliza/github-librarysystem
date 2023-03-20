@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // app.use(express.static("librarysystem"));
-app.use("/css", express.static("css"));
+app.use("/css", express.static(__dirname + "/css"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+
+//delete
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
 
 // Import the MySQL connection module
 const connection = require("./config/database");
@@ -49,6 +53,42 @@ app.post("/books", (req, res) => {
     }
 
     console.log(`New book record inserted with ID: ${results.insertId}`);
+    res.redirect("/books");
+  });
+});
+
+app.get("/delete/:id", (req, res) => {
+  // Get the ID of the book to be deleted from the request parameters
+  const id = req.params.id;
+
+  // Query the database for the book with the given ID
+  const sql = "SELECT * FROM tblbook WHERE id = ?";
+  connection.query(sql, id, (err, results) => {
+    if (err) {
+      console.error("Error querying database: ", err);
+      res.status(500).send("Error querying database");
+      return;
+    }
+
+    // Render the delete.ejs view with the book data
+    res.render("delete", { book: results[0] });
+  });
+});
+
+// Handle the DELETE request for deleting a book record
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+
+  // Delete the book record from the database
+  const sql = "DELETE FROM tblbook WHERE id = ?";
+  connection.query(sql, id, (err, results) => {
+    if (err) {
+      console.error("Error deleting book record: ", err);
+      res.status(500).send("Error deleting book record");
+      return;
+    }
+
+    console.log(`Book record with ID ${id} deleted`);
     res.redirect("/books");
   });
 });

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Delete Book Record</h1>
+
+    <p>Are you sure you want to delete the following book record?</p>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>ISBN</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Date Received</th>
+        <th>Category</th>
+        <th>Action</th>
+      </tr>
+
+      <tr>
+        <td><%= book.id %></td>
+        <td><%= book.isbn %></td>
+        <td><%= book.author %></td>
+        <td><%= book.publisher %></td>
+        <td><%= book.datereceived %></td>
+        <td><%= book.categoryname %></td>
+        <td>
+          <form action="/delete/<%= book.id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
