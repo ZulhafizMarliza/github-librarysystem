@@ -18,6 +18,8 @@
           <th>Publisher</th>
           <th>Date Received</th>
           <th>Category</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +31,9 @@
           <td><%= book.publisher %></td>
           <td><%= book.datereceived %></td>
           <td><%= book.categoryname %></td>
+          <td><a href="/edit/<%= book.id %>">Edit</a></td>
+          <td><a href="/delete/<%= book.id %>">Delete</a></td>
+          
         </tr>
         <% }) %>
       </tbody>

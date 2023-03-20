@@ -62,7 +62,12 @@ app.get("/delete/:id", (req, res) => {
   const id = req.params.id;
 
   // Query the database for the book with the given ID
-  const sql = "SELECT * FROM tblbook WHERE id = ?";
+  const sql = `SELECT tblbook.id, tblbook.isbn, tblbook.author, tblbook.publisher, tblbook.datereceived, tblcategorybook.categoryname
+  FROM tblbook
+  INNER JOIN tblcategorybook ON tblbook.tblcategorybook_categoryID = tblcategorybook.categoryID
+  WHERE tblbook.id = ?
+  ORDER BY tblbook.id;
+  `;
   connection.query(sql, id, (err, results) => {
     if (err) {
       console.error("Error querying database: ", err);
@@ -91,6 +96,62 @@ app.delete("/delete/:id", (req, res) => {
     console.log(`Book record with ID ${id} deleted`);
     res.redirect("/books");
   });
+});
+
+//Edit
+
+app.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+
+  // Query the database for the book with the given ID
+  const sql = `SELECT tblbook.id, tblbook.isbn, tblbook.author, tblbook.publisher, tblbook.datereceived, tblbook.tblcategorybook_categoryID, tblcategorybook.categoryname, tblcategorybook.categoryID
+  FROM tblbook
+  INNER JOIN tblcategorybook ON tblbook.tblcategorybook_categoryID = tblcategorybook.categoryID
+  WHERE tblbook.id = ?
+  ORDER BY tblbook.id;
+`;
+  connection.query(sql, id, (err, results) => {
+    if (err) {
+      console.error("Error querying database: ", err);
+      res.status(500).send("Error querying database");
+      return;
+    }
+
+    // Query the database for all categories
+    const sqlCategories = "SELECT * FROM tblcategorybook";
+    connection.query(sqlCategories, (err, categories) => {
+      if (err) {
+        console.error("Error querying database: ", err);
+        res.status(500).send("Error querying database");
+        return;
+      }
+
+      // Render the edit.ejs view with the book data and categories array
+      res.render("edit", { book: results[0], categories });
+    });
+  });
+});
+
+app.put("/edit/:id", (req, res) => {
+  const id = req.params.id;
+  const { isbn, author, publisher, category } = req.body;
+
+  // Update the book record in the database
+  const sql = `UPDATE tblbook SET isbn=?, author=?, publisher=?, tblcategorybook_categoryID=? WHERE id=?`;
+  connection.query(
+    sql,
+    [isbn, author, publisher, category, id],
+    (err, results) => {
+      if (err) {
+        console.error("Error updating book record: ", err);
+        res.status(500).send("Error updating book record");
+        return;
+      }
+
+      console.log(`Book record updated with ID: ${id}`);
+      res.redirect("/books");
+    }
+  );
 });
 
 app.listen(port, () => {
